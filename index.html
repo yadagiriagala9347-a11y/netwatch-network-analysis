@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NetWatch | Network Security</title>
+<style>
+:root{--bg:#090e19;--panel:#111a2a;--line:#26344a;--text:#e8effb;--muted:#91a0b8;--mint:#64e6c2;--blue:#7198ff;--purple:#bd91ff;--orange:#ffb86b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px Arial,sans-serif}
+header{padding:22px 5%;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:24px;font-weight:bold}.logo span{color:var(--mint)}
+.status{color:var(--mint);font-size:11px;letter-spacing:1px}
+main{max-width:1200px;margin:auto;padding:30px 22px}
+.eyebrow{color:var(--mint);font-size:11px;letter-spacing:2px}
+h1{font-size:clamp(30px,5vw,48px);margin:12px 0}
+h1 span{color:var(--mint)}
+p{color:var(--muted);line-height:1.7}
+button,select,input{background:#182438;color:var(--text);border:1px solid var(--line);padding:10px;border-radius:7px}
+button{cursor:pointer}button:hover{border-color:var(--mint)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 30px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;min-width:0}
+.label{font-size:10px;color:var(--muted);letter-spacing:1px}
+.value{font-size:30px;font-weight:bold;margin:12px 0}
+section{margin-top:34px}
+h2{font-size:23px}h3{font-size:15px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bar{height:9px;background:#26344a;border-radius:9px;overflow:hidden;margin:9px 0 17px}
+.bar span{display:block;height:100%;border-radius:9px}
+.row{display:flex;justify-content:space-between;gap:12px;font-size:12px}
+.mint{background:var(--mint)}.blue{background:var(--blue)}
+.purple{background:var(--purple)}.orange{background:var(--orange)}
+.finding{border-left:3px solid var(--mint);padding:3px 0 3px 14px;margin:20px 0}
+.warning{border-left-color:var(--orange)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{text-align:left;padding:13px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:normal}
+.tag{color:var(--mint)}footer{border-top:1px solid var(--line);margin-top:35px;padding:22px 0;color:var(--muted);font-size:11px}
+@media(max-width:750px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}header{padding:18px}.value{font-size:25px}main{padding:24px 15px}.card{padding:15px}table{font-size:10px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">netwatch<span>.</span></div>
+  <div class="status">● ANALYSIS REPORT</div>
+</header>
+<main>
+  <div class="eyebrow">CYBERSECURITY / NETWORK FORENSICS</div>
+  <h1>Network traffic,<br><span>made visible.</span></h1>
+  <p>Analyze protocol statistics from a Wireshark packet capture.
+  This dashboard displays recorded results, not live network traffic.</p>
+  <div class="actions">
+    <button onclick="document.querySelector('#protocols').scrollIntoView({behavior:'smooth'})">Explore protocols ↓</button>
+    <button onclick="downloadReport()">Export JSON report ↓</button>
+  </div>
+
+  <div class="grid">
+    <div class="card"><div class="label">FRAMES IN HIERARCHY</div><div class="value">1,377</div><p>Wireshark frame count</p></div>
+    <div class="card"><div class="label">CAPTURE SIZE</div><div class="value">727.9 KiB</div><p>745,832 reported bytes</p></div>
+    <div class="card"><div class="label">CAPTURE DURATION</div><div class="value">74.01 s</div><p>Conversation duration</p></div>
+    <div class="card"><div class="label">PROTOCOLS</div><div class="value">10</div><p>Selected protocol entries</p></div>
+  </div>
+
+  <section id="protocols">
+    <div class="eyebrow">01 / TRAFFIC COMPOSITION</div>
+    <h2>Protocol analysis</h2>
+    <p>Values transcribed from your unfiltered Wireshark Protocol Hierarchy.</p>
+    <div class="two">
+      <div class="card">
+        <h3>Network protocols</h3>
+        <div class="row"><span>IPv6</span><b>1,191 · 86.5%</b></div>
+        <div class="bar"><span class="mint" style="width:86.5%"></span></div>
+        <div class="row"><span>IPv4</span><b>178 · 12.9%</b></div>
+        <div class="bar"><span class="blue" style="width:12.9%"></span></div>
+        <div class="row"><span>ICMPv6</span><b>4 · 0.3%</b></div>
+        <div class="bar"><span class="purple" style="width:0.3%"></span></div>
+        <div class="row"><span>Address Resolution Protocol</span><b>8 · 0.6%</b></div>
+        <div class="bar"><span class="orange" style="width:0.6%"></span></div>
+      </div>
+      <div class="card">
+        <h3>Selected traffic entries</h3>
+        <div class="row"><span>TCP over IPv6</span><b>680</b></div>
+        <div class="bar"><span class="blue" style="width:49.4%"></span></div>
+        <div class="row"><span>UDP over IPv6</span><b>507</b></div>
+        <div class="bar"><span class="mint" style="width:36.8%"></span></div>
+        <div class="row"><span>QUIC</span><b>383</b></div>
+        <div class="bar"><span class="purple" style="width:27.8%"></span></div>
+        <div class="row"><span>DNS over IPv4</span><b>126</b></div>
+        <div class="bar"><span class="orange" style="width:9.2%"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">02 / APPLICATION TRAFFIC</div>
+    <h2>Encryption and protocols</h2>
+    <div class="card">
+      <div class="row"><span>TLS over IPv6</span><b>187 packets · 13.6%</b></div>
+      <div class="bar"><span class="mint" style="width:13.6%"></span></div>
+      <div class="row"><span>TLS over IPv4</span><b>27 packets · 2.0%</b></div>
+      <div class="bar"><span class="blue" style="width:2%"></span></div>
+      <div class="row"><span>QUIC under IPv6 UDP</span><b>383 packets · 27.8%</b></div>
+      <div class="bar"><span class="purple" style="width:27.8%"></span></div>
+      <div class="row"><span>DNS over IPv4</span><b>126 packets · 9.2%</b></div>
+      <div class="bar"><span class="orange" style="width:9.2%"></span></div>
+    </div>
+    <p>These entries belong to different protocol layers and can overlap. Do not add them together as unique packets.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">03 / SECURITY REVIEW</div>
+    <h2>Security observations</h2>
+    <div class="card">
+      <div class="finding">
+        <b class="tag">OBSERVATION · ENCRYPTION</b>
+        <p>TLS traffic is present. Encryption is common during secure browsing, but TLS alone does not prove a website is trustworthy.</p>
+      </div>
+      <div class="finding">
+        <b class="tag">OBSERVATION · QUIC</b>
+        <p>QUIC traffic appears in the capture. QUIC is commonly used by HTTP/3 and is not inherently suspicious.</p>
+      </div>
+      <div class="finding warning">
+        <b style="color:var(--orange)">LIMITATION · NO CONFIRMED ATTACK</b>
+        <p>This protocol summary alone cannot establish whether an attack occurred. Investigate endpoints, packet timing, and connection failures before drawing conclusions.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">04 / METHODOLOGY</div>
+    <h2>Project details</h2>
+    <div class="two">
+      <div class="card">
+        <h3>Analysis workflow</h3>
+        <p>1. Capture authorized traffic using Wireshark.</p>
+        <p>2. Clear display filters before full-capture analysis.</p>
+        <p>3. Open Statistics → Protocol Hierarchy.</p>
+        <p>4. Record results and investigate suspicious patterns using packet details.</p>
+      </div>
+      <div class="card">
+        <h3>Data integrity</h3>
+        <p>Results were manually entered from a Wireshark screenshot. Verify them against the original capture before submitting.</p>
+        <p>This is a static dashboard, not a live packet sensor or a complete PCAPNG parser.</p>
+        <p>Only capture traffic you own or have permission to analyze.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">05 / PROTOCOL REFERENCE</div>
+    <h2>Recorded values</h2>
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Protocol</th><th>Packets</th><th>Percentage</th><th>Layer</th></tr></thead>
+        <tbody id="protocolTable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>NETWATCH · NETWORK TRAFFIC ANALYSIS · EDUCATIONAL CYBERSECURITY PROJECT</footer>
+</main>
+<script>
+const protocols = [
+  {name:"IPv6",packets:1191,percent:86.5,layer:"Network"},
+  {name:"IPv4",packets:178,percent:12.9,layer:"Network"},
+  {name:"UDP over IPv6",packets:507,percent:36.8,layer:"Transport"},
+  {name:"TCP over IPv6",packets:680,percent:49.4,layer:"Transport"},
+  {name:"DNS over IPv4",packets:126,percent:9.2,layer:"Application"},
+  {name:"TLS over IPv6",packets:187,percent:13.6,layer:"Application"},
+  {name:"TLS over IPv4",packets:27,percent:2.0,layer:"Application"},
+  {name:"QUIC",packets:383,percent:27.8,layer:"Transport"},
+  {name:"ICMPv6",packets:4,percent:0.3,layer:"Network"},
+  {name:"Address Resolution Protocol",packets:8,percent:0.6,layer:"Network"}
+];
+document.getElementById("protocolTable").innerHTML = protocols.map(p =>
+  `<tr><td>${p.name}</td><td>${p.packets.toLocaleString()}</td><td>${p.percent}%</td><td>${p.layer}</td></tr>`
+).join("");
+function downloadReport(){
+  const report={
+    project:"NetWatch - Network Traffic Analysis",
+    source:"Wireshark Protocol Hierarchy screenshot",
+    framesInHierarchy:1377,
+    captureBytes:745832,
+    durationSeconds:74.01,
+    protocols,
+    notes:[
+      "Values manually transcribed from screenshot; verify before submission.",
+      "Protocol hierarchy entries overlap and are not additive.",
+      "Static dashboard; not live network monitoring.",
+      "TLS and QUIC do not by themselves indicate malicious activity."
+    ]
+  };
+  const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="netwatch-analysis-report.json";a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
